@@ -215,7 +215,7 @@ public:
             addInPlaceTextAnnotation(ann, i18n("Inline Note"), QString(), Okular::TextAnnotation::Unknown);
         } else if (typeString == QLatin1String("Typewriter")) {
             bool resok;
-            const QString content = QInputDialog::getMultiLineText(nullptr, i18n("New Text Note"), i18n("Text of the new note:"), QString(), &resok);
+            const QString content = QInputDialog::getMultiLineText(QApplication::activeWindow(), i18n("New Text Note"), i18n("Text of the new note:"), QString(), &resok);
             if (resok) {
                 addInPlaceTextAnnotation(ann, i18n("Typewriter"), content, Okular::TextAnnotation::TypeWriter);
             }
