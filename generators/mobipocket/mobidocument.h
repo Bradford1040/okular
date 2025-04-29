@@ -9,12 +9,13 @@
 #include <QTextDocument>
 #include <QUrl>
 #include <QVariant>
+#include <QFile>
+#include <qmobipocket_version.h>
 
 class QFile;
 namespace Mobipocket
 {
 class Document;
-class QFileStream;
 }
 
 namespace Mobi
@@ -29,7 +30,7 @@ public:
 
     Mobipocket::Document *mobi() const
     {
-        return doc;
+        return doc.get();
     }
 
 protected:
@@ -37,8 +38,8 @@ protected:
 
 private:
     QString fixMobiMarkup(const QString &data);
-    Mobipocket::Document *doc;
-    Mobipocket::QFileStream *file;
+    std::unique_ptr<Mobipocket::Document> doc;
+    QFile m_file;
 };
 
 }

@@ -8,15 +8,17 @@
 #include <QFile>
 #include <QRegularExpression>
 #include <qmobipocket/mobipocket.h>
-#include <qmobipocket/qfilestream.h>
 
 using namespace Mobi;
 
 MobiDocument::MobiDocument(const QString &fileName)
     : QTextDocument()
+    , m_file(QFile(fileName))
 {
-    file = new Mobipocket::QFileStream(fileName);
-    doc = new Mobipocket::Document(file);
+    if (!m_file.open(QIODeviceBase::ReadOnly)) {
+        return;
+    }
+    doc = std::make_unique<Mobipocket::Document>(&m_file);
     if (doc->isValid()) {
         QString text = doc->text();
         QString header = text.left(1024);
@@ -29,11 +31,7 @@ MobiDocument::MobiDocument(const QString &fileName)
     }
 }
 
-MobiDocument::~MobiDocument()
-{
-    delete doc;
-    delete file;
-}
+MobiDocument::~MobiDocument() = default;
 
 QVariant MobiDocument::loadResource(int type, const QUrl &name)
 {
